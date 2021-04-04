@@ -1,0 +1,102 @@
+{% extends 'credents/layout.html' %}
+
+{% block body %}
+
+<div style="max-width: 1060px; padding: 20px; margin: auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    {% if user.is_authenticated %}
+    <h1 class="display-6" style="color: white;"> Hello! {{ user.username.capitalize }}</h1>
+
+    {% endif %}  
+</div>
+
+<!-- if logged in user is a student then shows its information -->
+{% if request.user.is_student %}
+    <center><h2 style="color: aliceblue; font-size: 40px;">User Information</h2></center>
+    <div style="margin: auto auto; max-width: max-content; max-height: max-content; background-color: aliceblue; padding: 10px; border-radius: 5px; font-size: 30px;">
+    Id: {{request.user.id}}<br>
+    Username: {{request.user.username}}<br>
+    Email Id: {{request.user.email}}
+</center>
+{% endif %}
+<!-- load if user is a super admin -->
+    {% if request.user.is_super_admin %}
+    <center>
+      <!-- list all the teachers -->
+    <div style="max-width: max-content;" >
+        <h3 style="color: aliceblue;">List of Teachers:</h3>
+        <table class="table table-striped table-bordered border-primary" style="color: aliceblue;">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">Username</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- load all the teachers -->
+            {% for teacher in teachers %}
+              <tr style="color: aliceblue;">
+                <th scope="row">{{teacher.id}}</th>
+                <td>{{teacher.username}}</td>
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+        
+            
+    </div>
+</center>
+
+<center>
+  <!-- list all the students -->
+    <div style="max-width: max-content;" >
+        <h3 style="color: aliceblue;">List of Students:</h3>
+        <table class="table table-striped table-bordered border-primary" style="color: aliceblue;">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">Username</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- load all students -->
+            {% for student in students %}
+              <tr style="color: aliceblue;">
+                <th scope="row">{{student.id}}</th>
+                <td>{{student.username}}</td>
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>    
+    </div>
+</center>
+{% endif %}
+
+<!-- if logged in user is a teacher -->
+{% if request.user.is_teacher %}
+<center>
+    <div style="max-width: max-content;" >
+        <h3 style="color: aliceblue;">List of Students:</h3>
+        <table class="table table-striped table-bordered border-primary" style="color: aliceblue;">
+            <thead>
+              <tr>
+                <th scope="col">id</th>
+                <th scope="col">Username</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- shows all students -->
+            {% for student in students %}
+              <tr style="color: aliceblue;">
+                <th scope="row">{{student.id}}</th>
+                <td>{{student.username}}</td>
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>       
+    </div>
+</center>
+{% endif %}
+{% endblock %}  

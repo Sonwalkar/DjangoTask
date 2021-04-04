@@ -1,0 +1,72 @@
+{% extends 'credents/layout.html' %}
+
+{% block body %}
+
+<!-- register page -->
+<div style="padding: 10px; position: inherit;">
+<div class="card" style=" position: inherit; max-width: 500px; margin: 10px auto;">
+    <div class="card-header text-center">
+        <h3>Create Account</h3>
+    </div>
+    <div class="card-body" style="padding:15px 5%;">
+        <form action="{% url 'register' %}", method="POST">
+            {% csrf_token %}
+            
+            <div class="input-group mb-3">
+              <label class="input-group-text" for="inputGroupSelect01">Account Type</label>
+              <select class="form-select" id="inputGroupSelect01"  name="acc_type" required>
+                <option selected disabled>Choose...</option>
+                {% if request.user.is_super_admin %}
+                <!-- show all the account type option if logged user is super admin -->
+                <option value="super_admin">Super Admin</option>
+                <option value="teacher">Teacher</option>
+                <option value="student">Student</option>
+                {% endif %}
+                <!-- show only student option if logged in user is teacher -->
+                {% if request.user.is_teacher %}
+                <option value="student">Student</option>
+                {% endif %}
+                
+                </select>
+            </div>
+
+            <div>
+              <!-- registration form -->
+                <label class="form-label">Username</label>
+                <input autofocus style="position: inherit;" type="text" name="username" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required>
+                <font color="tomato">
+                    {% if msg %}
+                    {{msg}}
+                    {% endif %}
+                </font>
+              </div>
+              <br>
+              <div>
+                <label class="form-label">Email</label>
+                <input  style="position: inherit;" type="email" name="email" class="form-control" placeholder="Email" aria-label="email" aria-describedby="basic-addon1" required>
+              </div>
+              <br>
+              <div>
+                <label class="form-label">Password</label>
+                <input style="position: inherit;" type="password" name="password" class="form-control" placeholder="password" aria-label="password" aria-describedby="basic-addon1" required>
+              </div>
+              <br>
+              <div>
+                <label class="form-label">Re-type Password</label>
+                <input style="position: inherit;" type="password" name="re_password" class="form-control" placeholder="Re-type Password" aria-label="Re-type Password" aria-describedby="basic-addon1" required>
+                <font color="tomato">
+                    &nbsp;&nbsp;&nbsp;{% if pwd_not_match %}
+                    {{pwd_not_match}}
+                    {% endif %}
+                </font>
+              </div>
+              <br>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary" style="width: 40%;">Submit</button>  
+                <a href="{% url 'login' %}" class="btn btn-outline-secondary" style="width: 40%;">Cancel</a>        
+              </div>
+            </form>
+    </div>
+</div>
+</div>
+{% endblock %}
